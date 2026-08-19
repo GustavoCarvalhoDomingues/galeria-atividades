@@ -1,0 +1,7 @@
+{
+  "name": "galeria-atividades",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
