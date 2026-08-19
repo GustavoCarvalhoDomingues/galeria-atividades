@@ -1,39 +1,25 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
-import TabsPage from '../views/TabsPage.vue'
+import type { RouteRecordRaw } from 'vue-router';
 
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    redirect: '/tabs/tab1'
-  },
-  {
-    path: '/tabs/',
-    component: TabsPage,
-    children: [
-      {
-        path: '',
-        redirect: '/tabs/tab1'
-      },
-      {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
-      },
-      {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
-      },
-      {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
-      }
-    ]
-  }
+const isAuthenticated = () => localStorage.getItem('galeria-session') === 'true';
+const routes: RouteRecordRaw[] = [
+  { path: '/', redirect: () => (isAuthenticated() ? '/home' : '/login') },
+  { path: '/login', component: () => import('@/views/LoginPage.vue') },
+  { path: '/cadastro', component: () => import('@/views/RegisterPage.vue') },
+  { path: '/home', component: () => import('@/views/HomePage.vue'), meta: { requiresAuth: true } },
+  { path: '/sobre', component: () => import('@/views/AboutPage.vue'), meta: { requiresAuth: true } },
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) return '/login';
+  if ((to.path === '/login' || to.path === '/cadastro') && isAuthenticated()) return '/home';
+  return true;
+});
 
 export default router
