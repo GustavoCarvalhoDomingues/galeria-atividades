@@ -7,6 +7,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/login', component: () => import('@/views/LoginPage.vue') },
   { path: '/cadastro', component: () => import('@/views/RegisterPage.vue') },
   { path: '/home', component: () => import('@/views/HomePage.vue'), meta: { requiresAuth: true } },
+  { path: '/armazenamento', component: () => import('@/views/PreferencesPage.vue'), meta: { requiresAuth: true } },
   { path: '/sobre', component: () => import('@/views/AboutPage.vue'), meta: { requiresAuth: true } },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
